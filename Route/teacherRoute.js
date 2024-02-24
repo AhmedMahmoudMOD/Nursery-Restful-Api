@@ -3,6 +3,7 @@ const teacherController = require("./../Controller/teacherController");
 const {insertValidations,updateValidations} = require('../MiddleWares/Validations/TeacherValidations');
 const validator = require('../MiddleWares/Validations/Validator');
 const {isTeacher} = require('../MiddleWares/AuthMW');
+const upload = require('../MiddleWares/UploadMW');
 
 /**
  * @swagger
@@ -22,6 +23,7 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *           description: The teacher password
  *         image:
  *           type: string
+ *           format: binary
  *           description: The teacher image
  *     Message:
  *       type: object
@@ -83,7 +85,7 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/Teacher'
  *     responses:
@@ -106,9 +108,26 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Teacher'
+ *            type: object
+ *            properties:
+ *              _id:
+ *               type: string
+ *               description: the teacher id
+ *              fullname:
+ *               type: string
+ *               description: The teacher full name
+ *              email:
+ *               type: string
+ *               description: The teacher email
+ *              password:
+ *               type: string
+ *               description: The teacher password
+ *              image:
+ *               type: string
+ *               format: binary
+ *               description: The teacher image
  *     responses:
  *       200:
  *         description: The teacher was successfully updated
@@ -176,24 +195,27 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *         description: internal server error
  */
 
+
+
+
 // Route Intialization //
 const router = express.Router();
 
 router.route('/teachers')
         .all(isTeacher)
         .get(teacherController.getAllTeachersData)
-        .post(insertValidations,validator,teacherController.addNewTeacher)
-        .put(updateValidations,validator,teacherController.updateTeacher)
+        .post(upload.single('image'),insertValidations,validator,teacherController.addNewTeacher)
+        .put(upload.single('image'),updateValidations,validator,teacherController.updateTeacher)
         .delete(teacherController.deleteTeacher)
 
 /* /teachers/id route  */
-router.get('/teachers/:id([0-9a-fA-F]+)',teacherController.getTeacherByID)
+router.get('/teachers/:id([0-9a-fA-F]+)',isTeacher,teacherController.getTeacherByID)
 
 /* /teachers/supervisors route  */
-router.get('/teachers/supervisors',teacherController.getSupers)
+router.get('/teachers/supervisors',isTeacher,teacherController.getSupers)
 
 /* /teachers/changepassword route  */
-router.post('/teachers/changepassword',teacherController.changePassword)
+router.post('/teachers/changepassword',isTeacher,updateValidations,validator,teacherController.changePassword)
 
 
 module.exports=router;

@@ -91,7 +91,30 @@ const validator = require('../MiddleWares/Validations/Validator')
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Child'
+ *              type: object
+ *              properties:
+ *                fullname:
+ *                  type: string
+ *                  description: The child full name
+ *                age:
+ *                  type: number
+ *                  description: The child age
+ *                level:
+ *                  type: string
+ *                  description: The child level 
+ *                address:
+ *                   type: object
+ *                   description: The child address
+ *                   properties:
+ *                       city:
+ *                         type: string
+ *                         description: the addrees city
+ *                       street:
+ *                          type: string
+ *                          description: the addrees street
+ *                       building:
+ *                          type: string
+ *                          description: the addrees building
  *     responses:
  *       200:
  *         description: The Child was successfully added
