@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const AddressSchema = new mongoose.Schema({
     city:String,
@@ -13,6 +14,10 @@ let Schema = new mongoose.Schema({
     level:{type : String,
           enum: ["PreKG","KG1","KG2"]},
     address:AddressSchema
-})
+},{ _id: false }
+)
+
+Schema.plugin(AutoIncrement);
+
 
 module.exports=mongoose.model("children",Schema);
