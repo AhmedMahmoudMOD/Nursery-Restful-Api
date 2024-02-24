@@ -1,6 +1,7 @@
 const express = require('express');
 const childController = require("./../Controller/childController");
 const {insertValidations,updateValidations,deleteValidations} = require("../MiddleWares/Validations/ChildValidations")
+const {isTeacher,isAdmin,isAuthTeacher,isTeacherOrAdmin,isAuthTeacherOrAdmin} = require('../MiddleWares/AuthMW');
 const validator = require('../MiddleWares/Validations/Validator')
 
 /**
@@ -184,12 +185,13 @@ const router = express.Router();
 
 /* /child route  */
 router.route('/child')
+        .all(isTeacherOrAdmin)
         .get(childController.getAllChildrensData)
         .post(insertValidations,validator,childController.addNewChild)
         .put(updateValidations,validator,childController.updateChild)
         .delete(deleteValidations,validator,childController.deleteChild)
 
 /* /child/id route  */
-router.get('/child/:id',childController.getChildByID)
+router.get('/child/:id',isTeacherOrAdmin,childController.getChildByID)
 
 module.exports=router;

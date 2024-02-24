@@ -21,14 +21,21 @@ exports.login=(req,res,next)=>{
 
 exports.hashedLogin=(req,res,next)=>{
     let password = req.body.password;
+    let email = req.body.email;
     Teacher.findOne({email:req.body.email})
     .then((teacher)=>{
         if(teacher){
             bcrypt.compare(password,teacher.password)
             .then((auth)=>{
                 if(auth){
-                    let token = jwt.sign({id:teacher._id,role:"Teacher"},Key);
-                    res.status(200).json(token);
+                    if(email=="admin@test.com"&&password=="Admin12345_"){
+                        let token = jwt.sign({id:teacher._id,role:"Admin"},Key);
+                        res.status(200).json(token);
+                    }else{
+                        let token = jwt.sign({id:teacher._id,role:"Teacher"},Key);
+                        res.status(200).json(token);
+                    }
+                    
                 }else{
                     let error = new Error("Incorrect Password");
                     error.statusCode=401;

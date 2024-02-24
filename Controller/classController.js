@@ -14,7 +14,7 @@ exports.getAllClassData=(req,res,next)=>{
 
 // Get Data By ID //
 exports.getClassByID=(req,res,next)=>{
-    Child.findOne({_id:req.params.id})
+    Class.findOne({_id:req.params.id})
     .then((data)=>{
         if(data)
             res.json(data);

@@ -1,8 +1,9 @@
 const express = require('express');
 const classController = require("./../Controller/classController");
 const {insertValidations,updateValidations,deleteValidations} = require("../MiddleWares/Validations/ClassValidations")
+const {isTeacher,isAdmin,isAuthTeacher,isTeacherOrAdmin,isAuthTeacherOrAdmin} = require('../MiddleWares/AuthMW');
 const validator = require('../MiddleWares/Validations/Validator')
-const {isTeacher} = require('../MiddleWares/AuthMW');
+
 /**
  * @swagger
  * components:
@@ -201,18 +202,18 @@ const router = express.Router();
 
 /* /class route  */
 router.route('/class')
-        .all(isTeacher)
+        .all(isTeacherOrAdmin)
         .get(classController.getAllClassData)
         .post(insertValidations,validator,classController.addNewClass)
         .put(updateValidations,validator,classController.updateClass)
         .delete(deleteValidations,validator,classController.deleteClass)
 
 /* /class/id route  */
-router.get('/class/:id(\\d+)',isTeacher,classController.getClassByID)
+router.get('/class/:id(\\d+)',isTeacherOrAdmin,classController.getClassByID)
 /* /class/child/id route  */
-router.get('/class/child/:id',isTeacher,classController.getAllClassChildren)
+router.get('/class/child/:id',isTeacherOrAdmin,classController.getAllClassChildren)
 /* /class/teacher/id route  */
-router.get('/class/teacher/:id',isTeacher,classController.getClassTeacher)
+router.get('/class/teacher/:id',isAdmin,classController.getClassTeacher)
 
 
 module.exports=router;

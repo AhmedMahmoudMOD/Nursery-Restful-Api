@@ -209,20 +209,19 @@ const upload = require('../MiddleWares/UploadMW');
 const router = express.Router();
 
 router.route('/teachers')
-        .all(isTeacher)
-        .get(teacherController.getAllTeachersData)
-        .post(upload.single('image'),insertValidations,validator,teacherController.addNewTeacher)
-        .put(upload.single('image'),updateValidations,validator,teacherController.updateTeacher)
-        .delete(deleteValidations,validator,teacherController.deleteTeacher)
+        .get(isAdmin,teacherController.getAllTeachersData)
+        .post(isAdmin,upload.single('image'),insertValidations,validator,teacherController.addNewTeacher)
+        .put(isAuthTeacherOrAdmin,upload.single('image'),updateValidations,validator,teacherController.updateTeacher)
+        .delete(isAdmin,deleteValidations,validator,teacherController.deleteTeacher)
 
 /* /teachers/id route  */
-router.get('/teachers/:id([0-9a-fA-F]+)',isTeacher,teacherController.getTeacherByID)
+router.get('/teachers/:id([0-9a-fA-F]+)',isAuthTeacherOrAdmin,teacherController.getTeacherByID)
 
 /* /teachers/supervisors route  */
-router.get('/teachers/supervisors',isTeacher,teacherController.getSupers)
+router.get('/teachers/supervisors',isAdmin,teacherController.getSupers)
 
 /* /teachers/changepassword route  */
-router.post('/teachers/changepassword',isTeacher,updateValidations,validator,teacherController.changePassword)
+router.post('/teachers/changepassword',isTeacherOrAdmin,updateValidations,validator,teacherController.changePassword)
 
 
 module.exports=router;
