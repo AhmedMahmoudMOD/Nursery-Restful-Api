@@ -30,7 +30,7 @@ exports.addNewTeacher=(req,res,next)=>{
         fullname:req.body.fullname,
         password:req.body.password,
         email:req.body.email,
-        image:req.body.image
+        image:req.file.path
     });
 
     teacher.save().then(()=>{
@@ -41,7 +41,13 @@ exports.addNewTeacher=(req,res,next)=>{
 
 // Update Teacher //
 exports.updateTeacher=(req,res,next)=>{
-    Teacher.findByIdAndUpdate(req.body._id,req.body)
+    const updatedData = {
+        fullname:req.body.fullname,
+        password:req.body.password,
+        email:req.body.email,
+        image:req.file.path
+    };
+    Teacher.findByIdAndUpdate(req.body._id,updatedData)
     .then((data)=>{
         if(data)
             res.status(201).json({message:"updated"})
@@ -90,6 +96,3 @@ exports.changePassword=async (req,res,next)=>{
         })
     .catch((error)=>{next(error)});
 }
-
-
-
