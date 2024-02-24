@@ -50,6 +50,8 @@ const upload = require('../MiddleWares/UploadMW');
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Teacher'
+ *       401:
+ *         description: unauthnticated error
  */
 
 /**
