@@ -1,8 +1,8 @@
 const express = require('express');
 const teacherController = require("./../Controller/teacherController");
-const {insertValidations,updateValidations} = require('../MiddleWares/Validations/TeacherValidations');
+const {insertValidations,updateValidations,deleteValidations} = require('../MiddleWares/Validations/TeacherValidations');
 const validator = require('../MiddleWares/Validations/Validator');
-const {isTeacher} = require('../MiddleWares/AuthMW');
+const {isTeacher,isAdmin,isAuthTeacher,isTeacherOrAdmin,isAuthTeacherOrAdmin} = require('../MiddleWares/AuthMW');
 const upload = require('../MiddleWares/UploadMW');
 
 /**
@@ -68,7 +68,7 @@ const upload = require('../MiddleWares/UploadMW');
  *     responses:
  *       200:
  *         description: The teacher data by id
- *         contens:
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Teacher'
@@ -89,7 +89,7 @@ const upload = require('../MiddleWares/UploadMW');
  *           schema:
  *             $ref: '#/components/schemas/Teacher'
  *     responses:
- *       200:
+ *       201:
  *         description: The teacher was successfully added
  *         content:
  *           application/json:
@@ -129,7 +129,7 @@ const upload = require('../MiddleWares/UploadMW');
  *               format: binary
  *               description: The teacher image
  *     responses:
- *       200:
+ *       201:
  *         description: The teacher was successfully updated
  *         content:
  *           application/json:
@@ -152,7 +152,11 @@ const upload = require('../MiddleWares/UploadMW');
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Teacher'
+ *               type : object
+ *               properties:
+ *                    _id:
+ *                      type: string
+ *                      description : the teacher id
  *     responses:
  *       200:
  *         description: The teacher was successfully deleted
@@ -160,6 +164,7 @@ const upload = require('../MiddleWares/UploadMW');
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Message'
+ *               
  *       404:
  *         description: The teacher id was not found
  *       500:
@@ -180,17 +185,19 @@ const upload = require('../MiddleWares/UploadMW');
  *              properties:
  *                  _id:
  *                      type: string
- *                      description: the teacher id
+ *                      description: the user id
  *                  password:
  *                      type: string
  *                      description: the new password
  *     responses:
  *       200:
- *         description: The teacher was successfully added
+ *         description: The password was successfully changed
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Message'
+ *       404:
+ *         description: user not found         
  *       500:
  *         description: internal server error
  */
@@ -206,7 +213,7 @@ router.route('/teachers')
         .get(teacherController.getAllTeachersData)
         .post(upload.single('image'),insertValidations,validator,teacherController.addNewTeacher)
         .put(upload.single('image'),updateValidations,validator,teacherController.updateTeacher)
-        .delete(teacherController.deleteTeacher)
+        .delete(deleteValidations,validator,teacherController.deleteTeacher)
 
 /* /teachers/id route  */
 router.get('/teachers/:id([0-9a-fA-F]+)',isTeacher,teacherController.getTeacherByID)

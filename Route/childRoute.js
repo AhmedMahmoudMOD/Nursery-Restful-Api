@@ -116,7 +116,7 @@ const validator = require('../MiddleWares/Validations/Validator')
  *                          type: string
  *                          description: the addrees building
  *     responses:
- *       200:
+ *       201:
  *         description: The Child was successfully added
  *         content:
  *           application/json:
@@ -139,7 +139,7 @@ const validator = require('../MiddleWares/Validations/Validator')
  *           schema:
  *             $ref: '#/components/schemas/Child'
  *     responses:
- *       200:
+ *       201:
  *         description: The child was successfully updated
  *         content:
  *           application/json:
@@ -162,7 +162,11 @@ const validator = require('../MiddleWares/Validations/Validator')
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Child'
+ *               type : object
+ *               properties:
+ *                    _id:
+ *                      type: string
+ *                      description : the child id
  *     responses:
  *       200:
  *         description: The child was successfully deleted

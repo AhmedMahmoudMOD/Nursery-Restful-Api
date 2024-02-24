@@ -62,7 +62,7 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *     responses:
  *       200:
  *         description: The class data by id
- *         contens:
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Class'
@@ -83,7 +83,7 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *           schema:
  *             $ref: '#/components/schemas/Class'
  *     responses:
- *       200:
+ *       201:
  *         description: The class was successfully added
  *         content:
  *           application/json:
@@ -106,7 +106,7 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *           schema:
  *             $ref: '#/components/schemas/Class'
  *     responses:
- *       200:
+ *       201:
  *         description: The class was successfully updated
  *         content:
  *           application/json:
@@ -129,7 +129,11 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Class'
+ *               type : object
+ *               properties:
+ *                    _id:
+ *                      type: string
+ *                      description : the class id
  *     responses:
  *       200:
  *         description: The class was successfully deleted
@@ -159,10 +163,12 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *     responses:
  *       200:
  *         description: The class children data
- *         contens:
+ *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Class'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Child'
  *       404:
  *         description: The class id was not found
  */
@@ -182,10 +188,10 @@ const {isTeacher} = require('../MiddleWares/AuthMW');
  *     responses:
  *       200:
  *         description: The class supervisor data
- *         contens:
+ *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Class'
+ *               $ref: '#/components/schemas/Teacher'
  *       404:
  *         description: The class id was not found
  */
