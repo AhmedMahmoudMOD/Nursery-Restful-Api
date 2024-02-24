@@ -9,7 +9,7 @@ const authRoute = require('./Route/authRoute');
 const childRoute = require("./Route/childRoute");
 const teacherRoute = require("./Route/teacherRoute");
 const classRoute = require("./Route/classRoute");
-const docsRoute = require("./Route/docsRoute")
+const docsRoute = require("./Route/docsRoute");
 
 // Server Intialization //
 const server = express();
@@ -31,11 +31,6 @@ server.use(cors());
 // Logging With Morgan MiddleWare //
 server.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
-// Auth MiddleWare //
-server.use((request,response,next)=>{
-   console.log("User is Authorized");
-   next();
-})
 
 // Server Settings //
 server.use(express.json());
@@ -43,6 +38,7 @@ server.use(express.json());
 // Routes // 
 server.use(authRoute); /* /login */
 server.use(docsRoute);
+
 
 server.use(authorizationMW);
 server.use(teacherRoute);
